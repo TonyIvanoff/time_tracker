@@ -18,12 +18,12 @@
                     <th scope="col">#</th>
                     <th scope="col">Task ID</th>
                     <th scope="col">Task Created</th>
-                    <th scope="col">Task Started</th>
+                    <th scope="col">Task Updated</th>
                     <th scope="col">Task Completed</th>
                     <th scope="col">Task Duration</th>
                     <th scope="col">Task Type</th>
                     <th scope="col">Task Status</th>
-                    <th scope="col">Comments</th>
+                    
                 </tr>
             </thead>
             <tbody>
@@ -34,13 +34,13 @@
                         <td>
                             <a href="{% url 'task_detail' task.id %}">{{ task.task_id }}</a>
                         </td>
-                        <td>{{ task.created_at }}</td>
-                        <td>{{ task.updated_at }}</td>
-                        <td>{{ task.closed_at}}</td>
+                        <td>{{ task.created_at|date:"Y-m-d H:i"  }}</td>
+                        <td>{{ task.updated_at|date:"Y-m-d H:i"  }}</td>
+                        <td>{{ task.closed_at |date:"Y-m-d H:i" }}</td>
                         <td>{{ task.task_duration }}</td>
                         <td>{{ task.get_type_display }}</td>
                         <td>{{ task.get_status_display }}</td>
-                        <td>{{ task.task_comment }}</td>
+                        
                     </tr>
                         
                     {% endfor %}

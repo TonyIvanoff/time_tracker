@@ -62,16 +62,24 @@
         <p></p>
         <a href="{% url 'index' %}">Back to Task List</a>
         <p></p>
+        
+        {% if comments %}
         <h2>Comments</h2>
-        <ul>
+        <table class="table table-bordered">
+            <tr>
+                <th>Date</th>    
+                <th>Comment:</th>        
+            </tr>
             {% for comment in comments %}
-                <li>
-                    <strong>{{ comment.created_at|date:"Y-m-d H:i" }}</strong>: {{ comment.comment }}
-                </li>
-            {% empty %}
-                <li>No comments available for this task.</li>
+                <tr>
+                    <td>{{ comment.created_at|date:"Y-m-d H:i" }}</td>
+                    <td>{{ comment.comment }}</td>
+                </tr>
             {% endfor %}
-        </ul>
+        </table>
+    {% else %}
+        <h4>This task has no comments yet!</h4>
+    {% endif %}
     </div>    
 </body>
 </html>

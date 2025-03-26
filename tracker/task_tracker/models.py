@@ -35,8 +35,11 @@ class Task(models.Model):
 
     status = models.CharField(max_length=1, choices=TASK_STATUS, blank=True, default=WAITING)
 
+    class Meta:
+        ordering = ['-created_at']
+
     def save(self, *args, **kwargs):
-        super(Task, self).save(*args, **kwargs)  # Save Task first
+        
 
         if self.task_comment:
             Comment.objects.create(task=self, comment=self.task_comment)
@@ -57,7 +60,7 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['created_at']
+        ordering = ['-created_at']
 
     def __str__(self):
         if self.task:
