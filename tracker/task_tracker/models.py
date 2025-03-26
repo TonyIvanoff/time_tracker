@@ -1,3 +1,33 @@
 from django.db import models
 
-# Create your models here.
+
+class Task(models.Model):
+    id = models.UUIDField(primary_key=True, unique=True)
+    task_id = models.CharField(max_length=20, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    closed_at = models.DateTimeField(null=True, blank=True)
+    task_duration = models.DurationField(blank=True, null=True)
+    task_comment = models.CharField(max_length=250,blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if self.closed_at:
+            self.task_duration = self.closed_at - self.created_at
+        super(Task, self).save(*args, **kwargs)
+
+
+    TASK_TYPE = (
+        ('p', 'Production'),
+        ('n', 'Non_production')
+    )
+
+    type = models.CharField(max_length=1, choices=TASK_TYPE, blank=True, default='p')
+
+    TASK_STATUS = (
+        ('w', 'Waiting'),
+        ('s', 'Started'),
+        ('p', 'Paused'),
+        ('c', 'Completed')
+    )
+
+    status = models.CharField(max_length=1, choices=TASK_STATUS, blank=True, default='w')
