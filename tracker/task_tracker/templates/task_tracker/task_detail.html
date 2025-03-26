@@ -3,45 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Edit Task</title>
 </head>
 <body>
-    <h1>Task detail</h1>
-    <table class="table table-bordered">
-        <tr>
-            <th>Task ID</th>
-            <td>{{ task.task_id }}</td>
-        </tr>
-        <tr>
-            <th>Created At</th>
-            <td>{{ task.created_at }}</td>
-        </tr>
-        <tr>
-            <th>Updated At</th>
-            <td>{{ task.updated_at }}</td>
-        </tr>
-        <tr>
-            <th>Closed At</th>
-            <td>{{ task.closed_at }}</td>
-        </tr>
-        <tr>
-            <th>Task Duration</th>
-            <td>{{ task.task_duration }}</td>
-        </tr>
-        <tr>
-            <th>Task Type</th>
-            <td>{{ task.get_type_display }}</td>
-        </tr>
-        <tr>
-            <th>Task Status</th>
-            <td>{{ task.get_status_display }}</td>
-        </tr>
-        <tr>
-            <th>Comments</th>
-            <td>{{ task.task_comment }}</td>
-        </tr>
-    </table>
+    <h1>Edit Task</h1>
+    <form method="post">
+        {% csrf_token %}
+        <table class="table table-bordered">
+            <tr>
+                <th>Task ID</th>
+                <td><input type="text" name="task_id" value="{{ task.task_id }}" readonly></td>
+            </tr>
+            <tr>
+                <th>Created At</th>
+                <td>{{ task.created_at }}</td>
+            </tr>
+            <tr>
+                <th>Updated At</th>
+                <td>{{ task.updated_at }}</td>
+            </tr>
+            <tr>
+                <th>Closed At</th>
+                <td><input type="datetime-local" name="closed_at" value="{{ task.closed_at|date:'Y-m-d\\TH:i' }}"></td>
+            </tr>
+            <tr>
+                <th>Task Duration</th>
+                <td>{{ task.task_duration }}</td>
+            </tr>
+            <tr>
+                <th>Task Type</th>
+                <td>
+                    <select name="type">
+                        <option value="p" {% if task.type == 'p' %}selected{% endif %}>Production</option>
+                        <option value="n" {% if task.type == 'n' %}selected{% endif %}>Non-production</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>Task Status</th>
+                <td>
+                    <select name="status">
+                        <option value="w" {% if task.status == 'w' %}selected{% endif %}>Waiting</option>
+                        <option value="s" {% if task.status == 's' %}selected{% endif %}>Started</option>
+                        <option value="p" {% if task.status == 'p' %}selected{% endif %}>Paused</option>
+                        <option value="c" {% if task.status == 'c' %}selected{% endif %}>Completed</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>Comments</th>
+                <td><textarea name="task_comment">{{ task.task_comment }}</textarea></td>
+            </tr>
+        </table>
+        <button type="submit">Save Changes</button>
+    </form>
     <p></p>
-    <a href="{% url 'index' %}">Back to Task List</a> 
+    <a href="{% url 'index' %}">Back to Task List</a>
 </body>
 </html>
