@@ -46,7 +46,11 @@ class Task(models.Model):
             self.task_comment = ""
 
         if self.closed_at:
-            self.task_duration = self.closed_at - self.created_at
+            if self.closed_at > self.created_at:
+                self.task_duration = self.closed_at - self.created_at
+            else:
+                self.closed_at = None
+                self.task_duration = None
 
         super(Task, self).save(*args, **kwargs)  # Save Task again to update task_duration
 
