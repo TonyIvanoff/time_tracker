@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <tbody>
+        {% for task in tasks %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ task.task_id }}</td>
+            <td>{{ task.created_at }}</td>
+            <td>{{ task.updated_at }}</td>
+            <td>{{ task.closed_at}}</td>
+            <td>{{ task.task_duration }}</td>
+            <td>{{ task.get_type_display }}</td>
+            <td>{{ task.get_status_display }}</td>
+            <td>{{ task.task_comment }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</body>
+</html>

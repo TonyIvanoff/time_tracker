@@ -22,20 +22,24 @@
             </tr>
         </thead>
         <tbody>
-            {% for task in tasks %}
-            <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ task.task_id }}</td>
-                <td>{{ task.created }}</td>
-                <td>{{ task.started }}</td>
-                <td>{{ task.ended }}</td>
-                <td>{{ task.duration }}</td>
-                <td>{{ task.get_type_display }}</td>
-                <td>{{ task.get_status_display }}</td>
-                <td>{{ task.comments }}</td>
-            </tr>
-                
-            {% endfor %}
+            {% if tasks %}
+                {% for task in tasks %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ task.task_id }}</td>
+                    <td>{{ task.created_at }}</td>
+                    <td>{{ task.updated_at }}</td>
+                    <td>{{ task.closed_at}}</td>
+                    <td>{{ task.task_duration }}</td>
+                    <td>{{ task.get_type_display }}</td>
+                    <td>{{ task.get_status_display }}</td>
+                    <td>{{ task.task_comment }}</td>
+                </tr>
+                    
+                {% endfor %}
+            {% else %}
+                <h3>No tasks found</h3>
+            {% endif %}    
         </tbody>
 
     </table>
