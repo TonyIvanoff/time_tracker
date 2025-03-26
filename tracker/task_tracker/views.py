@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from task_tracker.models import Task
-
+from django.shortcuts import render, get_object_or_404
 
 
 def index(request):
@@ -16,8 +16,8 @@ def index(request):
     return render(request, 'task_tracker/index.html', context=context)
 
 
-def task_detail(request, task_id):
-    task = Task.objects.get(task_id=task_id)
+def task_detail(request, pk):
+    task = get_object_or_404(Task, pk=pk)
     context = {
         'task' : task
     }

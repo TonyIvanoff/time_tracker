@@ -6,20 +6,42 @@
     <title>Document</title>
 </head>
 <body>
-    <tbody>
-        {% for task in tasks %}
+    <h1>Task detail</h1>
+    <table class="table table-bordered">
         <tr>
-            <td>{{ forloop.counter }}</td>
+            <th>Task ID</th>
             <td>{{ task.task_id }}</td>
+        </tr>
+        <tr>
+            <th>Created At</th>
             <td>{{ task.created_at }}</td>
+        </tr>
+        <tr>
+            <th>Updated At</th>
             <td>{{ task.updated_at }}</td>
-            <td>{{ task.closed_at}}</td>
+        </tr>
+        <tr>
+            <th>Closed At</th>
+            <td>{{ task.closed_at }}</td>
+        </tr>
+        <tr>
+            <th>Task Duration</th>
             <td>{{ task.task_duration }}</td>
+        </tr>
+        <tr>
+            <th>Task Type</th>
             <td>{{ task.get_type_display }}</td>
+        </tr>
+        <tr>
+            <th>Task Status</th>
             <td>{{ task.get_status_display }}</td>
+        </tr>
+        <tr>
+            <th>Comments</th>
             <td>{{ task.task_comment }}</td>
         </tr>
-        {% endfor %}
-    </tbody>
+    </table>
+    <p></p>
+    <a href="{% url 'index' %}">Back to Task List</a> 
 </body>
 </html>

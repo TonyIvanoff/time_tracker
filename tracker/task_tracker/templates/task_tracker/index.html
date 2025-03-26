@@ -28,7 +28,9 @@
                 {% for task in tasks %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ task.task_id }}</td>
+                    <td>
+                        <a href="{% url 'task_detail' task.id %}">{{ task.task_id }}</a>
+                    </td>
                     <td>{{ task.created_at }}</td>
                     <td>{{ task.updated_at }}</td>
                     <td>{{ task.closed_at}}</td>
