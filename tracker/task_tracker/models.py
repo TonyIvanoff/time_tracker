@@ -33,3 +33,10 @@ class Task(models.Model):
     )
 
     status = models.CharField(max_length=1, choices=TASK_STATUS, blank=True, default='w')
+
+
+class Comment(models.Model):
+    task_id = models.ForeignKey(Task, on_delete=models.CASCADE)
+    comment = models.CharField(max_length=250, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    # comment_by = models.CharField(max_length=50) 

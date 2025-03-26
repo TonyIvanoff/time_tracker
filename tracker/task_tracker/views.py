@@ -36,3 +36,8 @@ def task_detail(request, pk):
         task.save()
         return redirect('task_detail', pk=task.pk)  # Redirect to the same page after saving
     return render(request, 'task_tracker/task_detail.html', {'task': task})
+
+def comment_history(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    comments = task.comment_set.all()
+    return render(request, 'task_tracker/task_detail.html', {'task': task, 'comments': comments})
