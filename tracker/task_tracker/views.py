@@ -13,7 +13,7 @@ def index(request):
         'tasks' : tasks
     }
     
-    return render(request, 'tracker/index.html', context=context)
+    return render(request, 'task_tracker/index.html', context=context)
 
 
 def task_detail(request, task_id):
@@ -21,4 +21,4 @@ def task_detail(request, task_id):
     context = {
         'task' : task
     }
-    return render(request, 'tracker/task_detail.html', context=context)
+    return render(request, 'task_tracker/task_detail.html', context=context)
