@@ -115,7 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Vilnius'
 
 USE_I18N = True
 
@@ -131,3 +131,14 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+JAZZMIN_SETTINGS = {
+    'site_title': 'Task Tracker',
+    'site_header': 'Task Tracker',
+    'site_brand': 'Task Tracker',
+    'site_title_short': 'TT',
+    # 'site_logo': 'static/img/logo.png',
+    'welcome_sign': 'Welcome to Task Tracker',
+
+}
