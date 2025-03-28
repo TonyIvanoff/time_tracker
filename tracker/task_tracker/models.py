@@ -9,7 +9,7 @@ class Task(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     closed_at = models.DateTimeField(null=True, blank=True)
     task_duration = models.DurationField(blank=True, null=True)
-    task_comment = models.CharField(max_length=1000, blank=True, null=True)
+   
     
 
     PRODUCTION = 'p'
@@ -20,7 +20,7 @@ class Task(models.Model):
         (NON_PRODUCTION, 'Non-production'),
     ]
 
-    type = models.CharField(max_length=1, choices=TASK_TYPE, blank=True, default=PRODUCTION)
+    type = models.CharField(max_length=1, choices=TASK_TYPE, blank=True, null=True, default=PRODUCTION)
 
     WAITING = 'w'
     STARTED = 's'
@@ -34,18 +34,12 @@ class Task(models.Model):
         (COMPLETED, 'Completed'),
     ]
 
-    status = models.CharField(max_length=1, choices=TASK_STATUS, blank=True, default=WAITING)
+    status = models.CharField(max_length=1, choices=TASK_STATUS, blank=True, null=True, default=WAITING)
 
     class Meta:
         ordering = ['-created_at']
 
     def save(self, *args, **kwargs):
-        
-
-        if self.task_comment:
-            Comment.objects.create(task=self, comment=self.task_comment)
-            self.task_comment = ""
-
         if self.closed_at:
             if self.closed_at > self.created_at:
                 self.task_duration = self.closed_at - self.created_at
@@ -60,7 +54,8 @@ class Task(models.Model):
 
 
 class Comment(models.Model):
-    task = models.ForeignKey(Task, on_delete=models.CASCADE, null=True)
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='comments')
+    
     comment = models.CharField(max_length=1000)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -68,6 +63,5 @@ class Comment(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        if self.task:
-            return f"Comment on Task {self.task.task_id} - {self.comment[:50]}"
-        return f"Comment (No Task) - {self.comment[:50]}"
+        return f"Comment on Task {self.task.task_id} - {self.comment[:50]}"
+     

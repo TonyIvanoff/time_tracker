@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 {% block title %}Task Detailed Information{% endblock %}
 {% block content %}
+<style>
+    .first-column {
+        width: 160px; /* Set a fixed width for the Date column */
+        white-space: nowrap; /* Prevent the date from wrapping to a new line */
+    }
+</style>
 <body>
     <div class="container">
         <h1>Edit Task</h1>
@@ -8,11 +14,11 @@
             {% csrf_token %}
             <table class="table table-bordered">
                 <tr>
-                    <th>Task ID</th>
+                    <th class="first-column">Task ID</th>
                     <td>{{ task.task_id }}</td>
                 </tr>
                 <tr>
-                    <th>Created At</th>
+                    <th class="first-column">Created At</th>
                     <td>{{ task.created_at |date:"Y-m-d H:i"}}</td>
                 </tr>
                 <tr>
@@ -25,7 +31,7 @@
                 </tr>
                 <tr>
                     <th>Task Duration</th>
-                    <td>{{ task.task_duration}}</td>
+                    <td>{{ task.task_duration|default_if_none:"Close Task First" }}</td>
                 </tr>
                 <tr>
                     <th>Task Type</th>
@@ -47,31 +53,26 @@
                         </select>
                     </td>
                 </tr>
-                <tr>
-
-            </table>
-            <button class="btn btn-dark type="submit">Save Changes</button>
-        </form>
-        <p></p><br>
-        <a href="{% url 'index' %}">Back to Task List</a>
-        <p></p>
-        
+ 
+            </table><br>
+            <button class="btn btn-dark" type="submit">Save Changes</button>
+        </form><br><br>
 
 
+        <h2>Comments</h2>
         <form method="post">
             {% csrf_token %}
-            <div class="mb-3">
-                <label for="add_comment" class="form-label">Comment</label>
-                <textarea class="form-control" id="add_comment" rows="2">{{ task.task_comment }}</textarea><br>
-                <input type="submit" value="Add comment" class="btn btn-dark" id="add_comment_btn">
-            </div>
-        </form>
+            <textarea name="comment" rows="2" class="form-control" placeholder="Add a comment"></textarea><br>
+            <button type="submit" class="btn btn-dark mt-2">Add Comment</button>
+
+        </form><br><br>
+
 
         {% if comments %}
-        <h2>Comments</h2>
-        <table class="table table-bordered">
+        
+        <table class="table table-bordered mt-3">
             <tr>
-                <th>Date</th>    
+                <th class="first-column">Date</th>    
                 <th>Comment:</th>        
             </tr>
             {% for comment in comments %}
