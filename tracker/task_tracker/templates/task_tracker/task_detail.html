@@ -1,12 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Task Detailed Information{% endblock %}
 {% block content %}
-<style>
-    .first-column {
-        width: 160px; /* Set a fixed width for the Date column */
-        white-space: nowrap; /* Prevent the date from wrapping to a new line */
-    }
-</style>
+
 <body>
     <div class="container">
         <h1>Edit Task</h1>
@@ -16,6 +11,10 @@
                 <tr>
                     <th class="first-column">Task ID</th>
                     <td>{{ task.task_id }}</td>
+                </tr>
+                <tr>
+                    <th class="first-column">Task Description</th>
+                    <td><textarea name="description" cols="100" rows="2">{{ task.description }}</textarea></td>
                 </tr>
                 <tr>
                     <th class="first-column">Created At</th>

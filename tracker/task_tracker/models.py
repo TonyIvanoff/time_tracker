@@ -5,6 +5,7 @@ import uuid
 class Task(models.Model):
     id = models.UUIDField(primary_key=True, unique=True, default=uuid.uuid4, editable=False)
     task_id = models.CharField(max_length=20, unique=True)
+    description = models.CharField(max_length=300, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     closed_at = models.DateTimeField(null=True, blank=True)
@@ -16,8 +17,8 @@ class Task(models.Model):
     NON_PRODUCTION = 'n'
 
     TASK_TYPE = [
-        (PRODUCTION, 'Production'),
-        (NON_PRODUCTION, 'Non-production'),
+        (PRODUCTION, 'Prod'),
+        (NON_PRODUCTION, 'Non-prod'),
     ]
 
     type = models.CharField(max_length=1, choices=TASK_TYPE, blank=True, null=True, default=PRODUCTION)

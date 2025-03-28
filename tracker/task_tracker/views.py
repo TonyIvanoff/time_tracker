@@ -45,6 +45,7 @@ def task_detail(request, pk):
             
 
         # Update other task fields if needed
+        task.description = request.POST.get('description')
         task.type = request.POST.get('type')
         task.status = request.POST.get('status')
         task.save()
@@ -53,3 +54,22 @@ def task_detail(request, pk):
 
     comments = task.comments.all()  # Fetch all comments for the task
     return render(request, 'task_tracker/task_detail.html', {'task': task, 'comments': comments})
+
+def create_task(request):
+    if request.method == 'POST':
+        task_id = request.POST.get('task_id')
+        description = request.POST.get('description')
+        type = request.POST.get('type')
+        status = request.POST.get('status')
+
+        task = Task(
+            task_id=task_id,
+            description=description,
+            type=type,
+            status=status,
+            created_at=timezone.now()
+        )
+        task.save()
+        return redirect('task_detail', pk=task.pk)
+
+    return render(request, 'task_tracker/index.html')
