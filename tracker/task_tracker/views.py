@@ -7,24 +7,33 @@ from django.utils.timezone import make_aware
 
 
 def index(request):
-    num_tasks = Task.objects.all().count()
-    # Get the sorting field and order from query parameters
-    sort_by = request.GET.get('sort_by', 'created_at')  # Default to 'created_at'
-    order = request.GET.get('order', 'asc')  # Default to ascending order
+    if request.method == 'POST':
+        # Get form data
+        task_id = request.POST.get('task_id')
+        description = request.POST.get('description')
+        task_type = request.POST.get('type')
+        status = request.POST.get('status')
 
-    # Determine the sorting order
-    if order == 'desc':
-        sort_by = f'-{sort_by}'  # Add '-' for descending order
+        # Validate required fields
+        if task_id and task_type and status:
+            # Create a new task
+            task = Task.objects.create(
+                task_id=task_id,
+                description=description,
+                type=task_type,
+                status=status
+            )
+            # Redirect to the task detail page
+            return redirect('task_detail', pk=task.pk)
 
-     #Fetch and sort tasks
-    tasks = Task.objects.all().order_by(sort_by)
-
+    # Handle GET request or invalid form submission
+    tasks = Task.objects.all().order_by('-created_at')
     context = {
         'tasks': tasks,
         'current_sort_by': request.GET.get('sort_by', 'created_at'),
         'current_order': request.GET.get('order', 'asc'),
     }
-    return render(request, 'task_tracker/index.html', context=context)
+    return render(request, 'task_tracker/index.html', context)
 
 
 from django.shortcuts import render, get_object_or_404, redirect
@@ -55,21 +64,3 @@ def task_detail(request, pk):
     comments = task.comments.all()  # Fetch all comments for the task
     return render(request, 'task_tracker/task_detail.html', {'task': task, 'comments': comments})
 
-def create_task(request):
-    if request.method == 'POST':
-        task_id = request.POST.get('task_id')
-        description = request.POST.get('description')
-        type = request.POST.get('type')
-        status = request.POST.get('status')
-
-        task = Task(
-            task_id=task_id,
-            description=description,
-            type=type,
-            status=status,
-            created_at=timezone.now()
-        )
-        task.save()
-        return redirect('task_detail', pk=task.pk)
-
-    return render(request, 'task_tracker/index.html')
