@@ -9,6 +9,7 @@ class Task(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     closed_at = models.DateTimeField(null=True, blank=True)
     task_duration = models.DurationField(blank=True, null=True)
+    task_comment = models.CharField(max_length=1000, blank=True, null=True)
     
 
     PRODUCTION = 'p'
