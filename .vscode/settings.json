@@ -1,0 +1,28 @@
+{
+    "folder-color.pathColors": [
+        {
+            "folderPath": "time_tracker/tracker/task_tracker/",
+            "color": "foldercolorizer.color_00cc00"
+        },
+        {
+            "folderPath": "time_tracker/tracker/tracker/",
+            "color": "foldercolorizer.color_ff0000"
+        },
+        {
+            "folderPath": "time_tracker/tracker/task_tracker/models.py/",
+            "color": "foldercolorizer.color_00cccc"
+        },
+        {
+            "folderPath": "time_tracker/tracker/task_tracker/tests.py/",
+            "color": "foldercolorizer.color_00cccc"
+        },
+        {
+            "folderPath": "time_tracker/tracker/task_tracker/urls.py/",
+            "color": "foldercolorizer.color_00cccc"
+        },
+        {
+            "folderPath": "time_tracker/tracker/task_tracker/views.py/",
+            "color": "foldercolorizer.color_00cccc"
+        }
+    ]
+}
