@@ -66,5 +66,5 @@ def create_task(request):
                     status=status
                 )
                 # Redirect to the task detail page
-                return redirect('task_detail', pk=task.pk)
+                return redirect('index')
         return render(request, 'task_tracker/create_task.html', {'task': task})
