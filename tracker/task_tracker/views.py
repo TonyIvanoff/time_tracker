@@ -7,25 +7,6 @@ from django.utils.timezone import make_aware
 
 
 def index(request):
-    if request.method == 'POST':
-        # Get form data
-        task_id = request.POST.get('task_id')
-        description = request.POST.get('description')
-        task_type = request.POST.get('type')
-        status = request.POST.get('status')
-
-        # Validate required fields
-        if task_id and task_type and status:
-            # Create a new task
-            task = Task.objects.create(
-                task_id=task_id,
-                description=description,
-                type=task_type,
-                status=status
-            )
-            # Redirect to the task detail page
-            return redirect('task_detail', pk=task.pk)
-
     # Handle GET request or invalid form submission
     tasks = Task.objects.all().order_by('-created_at')
     context = {
@@ -64,3 +45,26 @@ def task_detail(request, pk):
     comments = task.comments.all()  # Fetch all comments for the task
     return render(request, 'task_tracker/task_detail.html', {'task': task, 'comments': comments})
 
+
+
+def create_task(request):
+        task = None
+        if request.method == 'POST':
+            # Get form data
+            task_id = request.POST.get('task_id')
+            description = request.POST.get('description')
+            task_type = request.POST.get('type')
+            status = request.POST.get('status')
+
+            # Validate required fields
+            if task_id and task_type and status:
+                # Create a new task
+                task = Task.objects.create(
+                    task_id=task_id,
+                    description=description,
+                    type=task_type,
+                    status=status
+                )
+                # Redirect to the task detail page
+                return redirect('task_detail', pk=task.pk)
+        return render(request, 'task_tracker/create_task.html', {'task': task})
