@@ -2,8 +2,8 @@
 from task_tracker.models import Task
 from django.shortcuts import render, get_object_or_404, redirect
 from datetime import datetime
-from django.utils import timezone  # Import timezone utilities
 from django.utils.timezone import make_aware
+# import for pagination   from django.core.paginator import Paginator
 
 
 def index(request):
