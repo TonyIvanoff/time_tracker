@@ -4,86 +4,117 @@
 
 <body>
     <div class="container">
-        
-
         <h2>My Tasks</h2>
         {% if tasks %}
+        
+        <!-- Sort Controls -->
+        <div class="mb-3">
+            <div class="btn-group">
+                <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    Sort by: {{ current_sort_by|title|default:"Created" }}
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="?sort_by=created_at&order=desc">Created (Newest)</a></li>
+                    <li><a class="dropdown-item" href="?sort_by=created_at&order=asc">Created (Oldest)</a></li>
+                    <li><a class="dropdown-item" href="?sort_by=updated_at&order=desc">Updated (Newest)</a></li>
+                    <li><a class="dropdown-item" href="?sort_by=updated_at&order=asc">Updated (Oldest)</a></li>
+                    <li><a class="dropdown-item" href="?sort_by=status&order=asc">Status</a></li>
+                    <li><a class="dropdown-item" href="?sort_by=type&order=asc">Type</a></li>
+                </ul>
+            </div>
+        </div>
 
-        <table class="table table-striped table-sm">
-            <thead class="thead-dark">
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col"class="column-id">
-                        <a href="?sort_by=task_id&order={% if current_sort_by == 'task_id' and current_order == 'asc' %}desc{% else %}asc{% endif %}">
-                            ID
-                        </a>
-                    </th>
-                    <th scope="col" class="description-column">Task Description</th>
-                    <th scope="col">
-                        <a href="?sort_by=created_at&order={% if current_sort_by == 'created_at' and current_order == 'asc' %}desc{% else %}asc{% endif %}">
-                            Created 
-                        </a>
-                    </th>
-                    <th scope="col">
-                        <a href="?sort_by=updated_at&order={% if current_sort_by == 'updated_at' and current_order == 'asc' %}desc{% else %}asc{% endif %}">
-                            Updated
-                        </a>
-                    </th>
-                    <th scope="col">
-                        <a href="?sort_by=closed_at&order={% if current_sort_by == 'closed_at' and current_order == 'asc' %}desc{% else %}asc{% endif %}">
-                            Closed
-                        </a>
-                    </th>
-                    <th scope="col">
-                        <a href="?sort_by=task_duration&order={% if current_sort_by == 'task_duration' and current_order == 'asc' %}desc{% else %}asc{% endif %}">
-                            Duration
-                        </a>
-                    </th>
-                    <th scope="col">
-                        <a href="?sort_by=type&order={% if current_sort_by == 'type' and current_order == 'asc' %}desc{% else %}asc{% endif %}">
-                            Type
-                        </a>
-                    </th>
-                    <th scope="col">
-                        <a href="?sort_by=status&order={% if current_sort_by == 'status' and current_order == 'asc' %}desc{% else %}asc{% endif %}">
-                            Status
-                        </a>
-                    </th>
-                    <th scope="col">Last Comment</th>
-                </tr>
-            </thead>
-            <tbody>
-                
-                    {% for task in tasks %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td>
-                            <a href="{% url 'task_detail' task.id %}">{{ task.task_id }}</a>
-                        </td>
-                        <td>{{ task.description }}</td>
-                        <td>{{ task.created_at|date:"M-d H:i"  }}</td>
-                        <td>{{ task.updated_at|date:"M-d H:i"  }}</td>
-                        <td>{{ task.closed_at |date:"M-d H:i" }}</td>
-                        <td>{{ task.task_duration |default_if_none:"Close Task First"  }}</td>
-                        <td>{{ task.get_type_display }}</td>
-                        <td>{{ task.get_status_display }}</td>
-                        <td>
-                            {% with task.comments.first as newest_comment %}
-                            {{ newest_comment.comment|default:"No comments yet" }}
-                            {% endwith %}
-                        </td>
-                        
-                    </tr>
-                        
-                    {% endfor %}
-                {% else %}
-                    <h3>No tasks found</h3>
-                {% endif %}    
-            </tbody>
+        <!-- Task Cards -->
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for task in tasks %}
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">
+                                <a href="{% url 'task_detail' task.pk %}" class="text-decoration-none text-dark">{{ task.task_id }}</a>
+                            </h5>
+                            <div class="d-flex gap-2">
+                                <span class="badge bg-{{ task.get_status_display|lower }}">{{ task.get_status_display }}</span>
+                                <span class="badge {% if task.type == 'p' %}bg-production{% else %}bg-non-production{% endif %}">{{ task.get_type_display }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">{{ task.description|truncatewords:30 }}</p>
+                        <div class="task-meta">
+                            <small class="text-muted">
+                                <i class="fas fa-clock"></i> Created: {{ task.created_at|date:"M-d H:i" }}
+                            </small>
+                            {% if task.closed_at %}
+                            <br>
+                            <small class="text-muted">
+                                <i class="fas fa-check-circle"></i> Closed: {{ task.closed_at|date:"M-d H:i" }}
+                            </small>
+                            {% endif %}
+                        </div>
+                        <div class="mt-2">
+                            {% if task.task_duration %}
+                            <span class="badge bg-primary">{{ task.task_duration }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                {% with task.comments.first as newest_comment %}
+                                <i class="fas fa-comment"></i> {{ newest_comment.comment|default:"No comments"|truncatechars:50 }}
+                                {% endwith %}
+                            </small>
+                            <a href="{% url 'task_detail' task.pk %}" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-info-circle me-1"></i>Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
 
-        </table>
+        <!-- Pagination Controls -->
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if tasks.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1{% if current_sort_by %}&sort_by={{ current_sort_by }}{% endif %}{% if current_order %}&order={{ current_order }}{% endif %}" aria-label="First">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ tasks.previous_page_number }}{% if current_sort_by %}&sort_by={{ current_sort_by }}{% endif %}{% if current_order %}&order={{ current_order }}{% endif %}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                <li class="page-item active">
+                    <span class="page-link">
+                        Page {{ tasks.number }} of {{ tasks.paginator.num_pages }}
+                    </span>
+                </li>
+
+                {% if tasks.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ tasks.next_page_number }}{% if current_sort_by %}&sort_by={{ current_sort_by }}{% endif %}{% if current_order %}&order={{ current_order }}{% endif %}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ tasks.paginator.num_pages }}{% if current_sort_by %}&sort_by={{ current_sort_by }}{% endif %}{% if current_order %}&order={{ current_order }}{% endif %}" aria-label="Last">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% else %}
+            <h3>No tasks found</h3>
+        {% endif %}    
     </div>
-
-    {% endblock %}
 </body>
-</html>
+{% endblock %}
