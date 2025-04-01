@@ -25,7 +25,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Task Description</label>
-                            <textarea name="description" class="form-control" rows="3">{{ task.description }}</textarea>
+                            <textarea name="description" class="form-control" rows="3" {% if task.status == 'c' %}readonly{% endif %}>{{ task.description }}</textarea>
                         </div>
                         <div class="row g-3 mb-3">
                             <div class="col-md-6">
@@ -48,14 +48,14 @@
                         <div class="row g-3 mb-3">
                             <div class="col-md-6">
                                 <label class="form-label">Task Type</label>
-                                <select name="type" class="form-select">
+                                <select name="type" class="form-select" {% if task.status == 'c' %}disabled{% endif %}>
                                     <option value="p" {% if task.type == 'p' %}selected{% endif %}>Production</option>
                                     <option value="n" {% if task.type == 'n' %}selected{% endif %}>Non-production</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Task Status</label>
-                                <select name="status" class="form-select">
+                                <select name="status" class="form-select" {% if task.status == 'c' %}disabled{% endif %}>
                                     <option value="w" {% if task.status == 'w' %}selected{% endif %}>Waiting</option>
                                     <option value="s" {% if task.status == 's' %}selected{% endif %}>Started</option>
                                     <option value="p" {% if task.status == 'p' %}selected{% endif %}>Paused</option>
@@ -64,7 +64,7 @@
                             </div>
                         </div>
                         <div class="d-flex gap-2">
-                            <button class="btn btn-primary" type="submit">
+                            <button class="btn btn-primary" type="submit" {% if task.status == 'c' %}disabled{% endif %}>
                                 <i class="fas fa-save me-2"></i>Save Changes
                             </button>
                             <a href="{% url 'index' %}" class="btn btn-outline-secondary">
@@ -81,6 +81,7 @@
                     <h5 class="mb-0"><i class="fas fa-comments me-2"></i>Comments</h5>
                 </div>
                 <div class="card-body">
+                    {% if task.status != 'c' %}
                     <form method="post" class="mb-4">
                         {% csrf_token %}
                         <div class="form-floating">
@@ -91,6 +92,11 @@
                             <i class="fas fa-comment me-2"></i>Add Comment
                         </button>
                     </form>
+                    {% else %}
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>Comments are disabled for completed tasks.
+                    </div>
+                    {% endif %}
 
                     {% if comments %}
                         {% for comment in comments %}
@@ -99,6 +105,18 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="flex-grow-1">
                                         <p class="card-text mb-0 comment-text">{{ comment.comment }}</p>
+                                        <small class="text-muted">{{ comment.created_at|date:"Y-m-d H:i" }}</small>
+                                    </div>
+                                    {% if task.status != 'c' %}
+                                    <div class="ms-2">
+                                        <button class="btn btn-sm btn-outline-primary edit-comment" data-comment-id="{{ comment.id }}">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
                                         <form method="post" class="edit-comment-form d-none">
                                             {% csrf_token %}
                                             <input type="hidden" name="comment_id" value="{{ comment.id }}">

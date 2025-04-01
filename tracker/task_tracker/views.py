@@ -80,9 +80,9 @@ def task_detail(request, pk):
             task.type = request.POST.get('type')
             task.status = request.POST.get('status')
             
-            # If status changes to completed, set closed_at
+            # If status changes to completed, set closed_at with timezone-aware datetime
             if task.status == 'c' and old_status != 'c':
-                task.closed_at = datetime.now()
+                task.closed_at = make_aware(datetime.now())
             
             task.save()
             return redirect('task_detail', pk=pk)
