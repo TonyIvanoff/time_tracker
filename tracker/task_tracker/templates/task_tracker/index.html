@@ -46,6 +46,10 @@
                             <small class="text-muted">
                                 <i class="fas fa-clock"></i> Created: {{ task.created_at|date:"M-d H:i" }}
                             </small>
+                            <br>
+                            <small class="text-muted">
+                                <i class="fas fa-clock"></i> Updated: {{ task.updated_at|date:"M-d H:i" }}
+                            </small>
                             {% if task.closed_at %}
                             <br>
                             <small class="text-muted">

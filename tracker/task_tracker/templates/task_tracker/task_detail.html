@@ -70,6 +70,9 @@
                             <a href="{% url 'index' %}" class="btn btn-outline-secondary">
                                 <i class="fas fa-arrow-left me-2"></i>Back to List
                             </a>
+                            <button class="btn btn-secondary" type="submit" {% if task.status == 'c' %}enabled {% else %}hidden {% endif %}>
+                                <i class="fas fa-arrow-up me-2"></i>Reopen Task
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -100,7 +103,7 @@
 
                     {% if comments %}
                         {% for comment in comments %}
-                        <div class="card mb-2">
+                        <div class="card mb-2 container">
                             <div class="card-body py-2">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="flex-grow-1">
@@ -133,16 +136,16 @@
                                                 </button>
                                             </div>
                                         </form>
-                                    </div>
+                                    
                                     <div class="ms-3">
                                         <small class="text-muted">{{ comment.created_at|date:"Y-m-d H:i" }}</small>
                                         <button class="btn btn-sm btn-link text-muted edit-comment-btn">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
+                                
+                            
+                        
                         {% endfor %}
                     {% else %}
                         <p class="text-muted">This task has no comments yet!</p>
